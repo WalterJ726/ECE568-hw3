@@ -22,29 +22,23 @@
             <a class="nav-link" aria-current="page" href='{% url 'index' %}'>Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href=#>View as Driver</a>
+            <a class="nav-link" href="#">View as Driver</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href=#>Arrange a Ride</a>
+            <a class="nav-link" href="{% url 'ownerIndex' %}">Arrange a Ride</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href=#>Find a Ride</a>
+            <a class="nav-link" href="#">Find a Ride</a>
           </li>
-          {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'update-profile' %}">Update Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>    
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Log in</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Sign up</a>   
-          </li>
-          {% endif %}
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{request.session.info.name}}
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'ownerUpdate' %}">Update Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
+            </ul>
+          </div>
         </ul>
       </header><br><br><br>
 

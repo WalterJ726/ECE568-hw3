@@ -29,22 +29,30 @@
   </head>
 
   <div class="account">
-    <h2>User Login</h2>
+    <h2>User Register</h2>
     <form method="post" novalidate>
       {% csrf_token %}
         <div class="form-group">
             <label>Username</label>
             {{ form.username }}
-            <span style="color: red;">{{ form.username.errors.0 }}</span>
         </div>
         <div class="form-group">
-            <label>Password</label>
+            <label>New Password</label>
             {{ form.password }}
             <span style="color: red;">{{ form.password.errors.0 }}</span>
         </div>
+        <div class="form-group">
+          <label>Re-Password</label>
+          {{ form.confirm_password }}
+          <span style="color: red;">{{ form.confirm_password.errors.0 }}</span>
+        </div>
+        <div class="form-group">
+          <label>New Email</label>
+          {{ form.email }}
+          <span style="color: red;">{{ form.email.errors.0 }}</span>
+        </div>
 
-        <input type="submit" value="login" class="btn btn-primary">
-        <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+        <input type="submit" value="update" class="btn btn-primary">
     </form>
   </div>
 </html>
