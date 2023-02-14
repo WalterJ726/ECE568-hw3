@@ -33,13 +33,13 @@ ALLOWED_HOSTS = ['vcm-30576.vm.duke.edu',
 # Application definition
 
 INSTALLED_APPS = [
+    'catalog.apps.CatalogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog.apps.CatalogConfig',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'rideSharing.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'RideDB',
+        'NAME': 'TestDB',
         'USER': 'zj78',
         'PASSWORD': '!Qq1281372141',
         'HOST': '127.0.0.1',

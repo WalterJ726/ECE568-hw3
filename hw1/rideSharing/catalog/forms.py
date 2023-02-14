@@ -69,7 +69,20 @@ class ownerUpdateModelForm(BootStrapModelForm):
 class OrderModelForm(forms.ModelForm):
     class Meta:
         model = models.Order
-        fields = ['destination', 'arrival_time', 'total_passanger', 'vehicle_type', 'sharable', 'special_requests']
+        fields = ['destination', 'arrival_time', 'total_passanger', 'vehicle_type', 'shareable', 'special_requests']
         widgets = {
             'arrival_time' : forms.DateTimeInput(attrs={'placeholder': '2006-10-25 14:30:59'})
         }
+        
+
+class SharerSearchOrderForm(forms.Form):
+    destination = forms.CharField(max_length=100)
+    earliestTime = forms.DateTimeField()
+    latestTime = forms.DateTimeField()
+    number_passengers = forms.IntegerField()
+
+
+class DriverUpdateForm(forms.ModelForm):
+    class Meta:
+        model = models.Driver
+        fields = ['vehicle_type', 'maxslot', 'plate_number']

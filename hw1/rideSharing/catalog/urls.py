@@ -16,4 +16,18 @@ urlpatterns = [
     path('ownerCurrentRequest/', views.ownerCurrentRequest, name='ownerCurrentRequest'),
     path('ownerCurrentRequest/<int:request_id>/delete/', views.requestDelete, name='requestDelete'),
     path('ownerCurrentRequest/<int:request_id>/edit/', views.requestEdit, name='requestEdit'),
+
+
+    ## sharer
+    path('sharerIndex/', views.sharerIndex, name='sharerIndex'),
+    path('sharerSearch/', views.sharerSearch, name='sharerSearch'),
+    path('sharerShareableRequests/', views.sharerShareableRequests, name='sharerShareableRequests'),
+    path('sharerShareableRequests/<int:request_id>/join/', views.sharerShareableRequestsJoin, name='sharerShareableRequestsJoin'),
+    path('sharerCurrentRequests/', views.sharerCurrentRequests, name='sharerCurrentRequests'),
+    path('sharerShareableRequests/<int:request_id>/delete/', views.sharerShareableRequestsDelete, name='sharerShareableRequestsDelete'),
+
+    ## driver
+    path('driverIndex/', views.driverIndex, name='driverIndex'),
+    path('driverUpdate/', views.driverUpdate, name='driverUpdate'),
+    path('driverSearch/', views.driverSearch, name='driverSearch'),
 ]

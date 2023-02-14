@@ -17,7 +17,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for order in currentRequest %}
+        {% for order in currentShareableRequests %}
         <tr>
             <td>{{order.id}}</td>
             <td>{{order.destination}}</td>
@@ -25,10 +25,9 @@
             <td>{{order.total_passanger}}</td>
             <td>{{order.get_vehicle_type_display}}</td>
             <td>None</td>
-            <td>{{order.shared_people}}</td>
+            <td>None</td>
             <td>
-            <a class="btn btn-primary btn-xs" href="/catalog/ownerCurrentRequest/{{order.id}}/edit/">Edit</a>
-            <a class="btn btn-danger btn-xs" href="/catalog/ownerCurrentRequest/{{order.id}}/delete/">Delete</a>
+            <a class="btn btn-primary btn-xs" href="/catalog/sharerShareableRequests/{{order.id}}/join/">Join</a>
             </td>
         </tr>
         {% endfor %}

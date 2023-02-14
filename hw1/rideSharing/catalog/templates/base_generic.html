@@ -22,13 +22,13 @@
             <a class="nav-link" aria-current="page" href='{% url 'index' %}'>Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">View as Driver</a>
+            <a class="nav-link" href="{% url 'driverIndex' %}">View as Driver</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'ownerIndex' %}">Arrange a Ride</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Find a Ride</a>
+            <a class="nav-link" href="{% url 'sharerIndex' %}">Find a Ride</a>
           </li>
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
