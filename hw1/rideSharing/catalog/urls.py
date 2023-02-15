@@ -16,6 +16,7 @@ urlpatterns = [
     path('ownerCurrentRequest/', views.ownerCurrentRequest, name='ownerCurrentRequest'),
     path('ownerCurrentRequest/<int:request_id>/delete/', views.requestDelete, name='requestDelete'),
     path('ownerCurrentRequest/<int:request_id>/edit/', views.requestEdit, name='requestEdit'),
+    path('ownerPassOrder/', views.ownerPassOrder, name='ownerPassOrder'),
 
 
     ## sharer
@@ -25,9 +26,14 @@ urlpatterns = [
     path('sharerShareableRequests/<int:request_id>/join/', views.sharerShareableRequestsJoin, name='sharerShareableRequestsJoin'),
     path('sharerCurrentRequests/', views.sharerCurrentRequests, name='sharerCurrentRequests'),
     path('sharerShareableRequests/<int:request_id>/delete/', views.sharerShareableRequestsDelete, name='sharerShareableRequestsDelete'),
-
+    path('sharerPassOrder/', views.sharerPassOrder, name='sharerPassOrder'),
+    
     ## driver
     path('driverIndex/', views.driverIndex, name='driverIndex'),
     path('driverUpdate/', views.driverUpdate, name='driverUpdate'),
     path('driverSearch/', views.driverSearch, name='driverSearch'),
+    path('driverSearch/<int:request_id>/confirmed/', views.driverSearchConfirmed, name='driverSearchConfirmed'),
+    path('driverOrders/', views.driverOrders, name='driverOrders'),
+    path('driverOrders/<int:request_id>/completed/', views.driverOrdersCompleted, name='driverOrdersCompleted'),
+    path('driverPassOrders/', views.driverPassOrders, name='driverPassOrders'),
 ]

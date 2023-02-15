@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from . import models
 from catalog.forms import LoginForm, RegisterModelForm, ownerUpdateModelForm, OrderModelForm, SharerSearchOrderForm, DriverUpdateForm
+from datetime import datetime
 
 def index(request):
     return render(
@@ -141,6 +142,11 @@ def requestEdit(request, request_id):
         return redirect('/catalog/ownerCurrentRequest/')
     return render(request, 'ownerNewRequest.html', context)
 
+def ownerPassOrder(request):
+    owner_id = request.session['info']['id']
+    currentAvailableRequests = models.Order.objects.filter(user_id=owner_id, is_confirmed=True, is_completed=True)
+    context = {'currentAvailableRequests': currentAvailableRequests} 
+    return render(request, 'ownerPassOrder.html', context)  
 
 def sharerIndex(request):
     return render(request, 'sharerIndex.html')
@@ -174,7 +180,8 @@ def sharerShareableRequestsJoin(request, request_id):
     currentRequest = models.Order.objects.filter(id=request_id)
     current_number = currentRequest.first().total_passanger ## currentRequest.first() is an object
     shared_people = request.session['info']['name']  ## todo: 要和当前id匹配才行
-    currentRequest.update(total_passanger=current_number+1, shared_people=shared_people)
+    shared_people_id = request.session['info']['id']
+    currentRequest.update(total_passanger=current_number+1, shared_people=shared_people, shared_people_id=shared_people_id)
     return render(request, 'sharerIndex.html')
 
 def sharerCurrentRequests(request):
@@ -189,6 +196,12 @@ def sharerShareableRequestsDelete(request, request_id):
     current_number = currentRequest.first().total_passanger ## currentRequest.first() is an object
     currentRequest.update(total_passanger=current_number-1, shared_people=None)
     return render(request, 'sharerIndex.html')
+
+def sharerPassOrder(request):
+    owner_id = request.session['info']['id']
+    currentAvailableRequests = models.Order.objects.filter(shared_people_id=owner_id, is_confirmed=True, is_completed=True)
+    context = {'currentAvailableRequests': currentAvailableRequests} 
+    return render(request, 'sharerPassOrder.html', context)  
 
 
 def driverIndex(request):
@@ -216,9 +229,50 @@ def driverSearch(request):
     driverId = request.session['info']['id']
     # print(driverId)
     # driver_object = request.user.driver
-    driver_object = models.Driver.objects.filter(driver_info=driverId).first(  )
+    driver_object = models.Driver.objects.filter(driver_info=driverId).first()
     vehicle_type = driver_object.vehicle_type
     maxslot = driver_object.maxslot
-    currentAvailableRequests = models.Order.objects.filter(total_passanger__lte=maxslot, vehicle_type=vehicle_type)
+    currentAvailableRequests = models.Order.objects.filter(total_passanger__lte=maxslot, vehicle_type=vehicle_type, is_confirmed=False)
     context = {'currentAvailableRequests': currentAvailableRequests} 
     return render(request, 'driverSearch.html', context)
+
+
+def driverSearchConfirmed(request, request_id):
+    driverId = request.session['info']['id']
+    driver_object = models.Driver.objects.filter(driver_info=driverId).first()
+    print(driver_object)
+    vehicle_type = driver_object.vehicle_type
+    plate_number = driver_object.plate_number
+    confirmed_order_obejct = models.Order.objects.filter(id=request_id)
+    confirmed_order_obejct.update(is_confirmed=True, plate_number=plate_number, vehicle_type=vehicle_type)
+    return render(request, 'driverIndex.html')
+
+def driverOrders(request):
+    driverId = request.session['info']['id']
+    driver_object = models.Driver.objects.filter(driver_info=driverId).first()
+    vehicle_type = driver_object.vehicle_type
+    plate_number = driver_object.plate_number
+    is_confirmed=True
+    print(driver_object)
+    currentAvailableRequests = models.Order.objects.filter(vehicle_type=vehicle_type, plate_number=plate_number, is_confirmed=is_confirmed, is_completed=False)
+    context = {'currentAvailableRequests': currentAvailableRequests} 
+    return render(request, 'driverOrders.html', context)
+
+def driverOrdersCompleted(request, request_id):
+    driverId = request.session['info']['id']
+    driver_object = models.Driver.objects.filter(driver_info=driverId).first()
+    completed_order_obejct = models.Order.objects.filter(id=request_id)
+    completed_order_obejct.update(is_completed=True, completed_time=datetime.now())
+    return render(request, 'driverIndex.html')
+
+
+def driverPassOrders(request):
+    driverId = request.session['info']['id']
+    driver_object = models.Driver.objects.filter(driver_info=driverId).first()
+    vehicle_type = driver_object.vehicle_type
+    plate_number = driver_object.plate_number
+    is_confirmed=True
+    print(driver_object)
+    currentAvailableRequests = models.Order.objects.filter(vehicle_type=vehicle_type, plate_number=plate_number, is_confirmed=is_confirmed, is_completed=True)
+    context = {'currentAvailableRequests': currentAvailableRequests} 
+    return render(request, 'driverPassOrders.html', context)

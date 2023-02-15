@@ -22,6 +22,9 @@ class Driver(models.Model):
     maxslot = models.SmallIntegerField()
     plate_number = models.IntegerField()
 
+    def __str__(self):
+        return '(%s) (%s) (%s) (%s)' % (self.driver_info,self.vehicle_type,self.maxslot,self.plate_number)
+
 class Order(models.Model):
     VEHICLE_TYPES = (
         ('b', 'BMW'),
@@ -37,11 +40,13 @@ class Order(models.Model):
     vehicle_type = models.CharField(max_length=1, choices=VEHICLE_TYPES)
     # plate_numer = models.OneToOneField('Driver', )
     comfirmed_order_driver = models.SmallIntegerField(null=True, blank=True)
-    plate_numer = models.IntegerField(null=True, blank=True)
+    plate_number = models.IntegerField(null=True, blank=True)
     shareable = models.BooleanField()
+    shared_people_id = models.IntegerField(null=True, blank=True)
     shared_people = models.CharField(max_length=100, null=True, blank=True)
     special_requests = models.CharField(max_length=100)
-    is_completed = models.BooleanField(default=True)
+    is_confirmed = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
     completed_time = models.DateTimeField(null=True, blank=True)
 
 

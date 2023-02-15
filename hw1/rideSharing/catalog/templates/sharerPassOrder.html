@@ -10,8 +10,10 @@
           <th scope="col">Destination</th>
           <th scope="col">Arrival_time</th>
           <th scope="col">total_passanger</th>
+          <th scope="col">vehicle_type</th>
+          <th scope="col">plate_number</th>
           <th scope="col">Shared People</th>
-          <th scope="col">Action</th>
+          <th scope="col">Completed Time</th>
         </tr>
       </thead>
       <tbody>
@@ -21,10 +23,11 @@
             <td>{{order.destination}}</td>
             <td>{{order.arrival_time}}</td>
             <td>{{order.total_passanger}}</td>
-            <td>{{order.shared_people}}</td>
-            <td>
-            <a class="btn btn-primary btn-xs" href="/catalog/driverSearch/{{order.id}}/confirmed/">Pick</a>
-            </td>
+            <td>{{order.get_vehicle_type_display}}</td>
+            <td>{{order.plate_number}}</td>
+            <td>{{order.user_username}}</td>
+            <td>{{order.completed_time}}</td>
+            <td></td>
         </tr>
         {% endfor %}
       </tbody>

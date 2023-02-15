@@ -11,7 +11,7 @@
           <th scope="col">Arrival_time</th>
           <th scope="col">total_passanger</th>
           <th scope="col">Shared People</th>
-          <th scope="col">Action</th>
+          <th scope="col">Completed Time</th>
         </tr>
       </thead>
       <tbody>
@@ -22,9 +22,7 @@
             <td>{{order.arrival_time}}</td>
             <td>{{order.total_passanger}}</td>
             <td>{{order.shared_people}}</td>
-            <td>
-            <a class="btn btn-primary btn-xs" href="/catalog/driverSearch/{{order.id}}/confirmed/">Pick</a>
-            </td>
+            <td>{{order.completed_time}}</td>
         </tr>
         {% endfor %}
       </tbody>
