@@ -11,7 +11,7 @@
           <th scope="col">Arrival_time</th>
           <th scope="col">total_passanger</th>
           <th scope="col">vehicle_type</th>
-          <th scope="col">plate_numer</th>
+          <th scope="col">plate_nubmer</th>
           <th scope="col">Shared People</th>
           <th scope="col">Action</th>
         </tr>
@@ -24,8 +24,8 @@
             <td>{{order.arrival_time}}</td>
             <td>{{order.total_passanger}}</td>
             <td>{{order.get_vehicle_type_display}}</td>
-            <td>None</td>
-            <td>None</td>
+            <td>{{order.plate_nubmer}}</td>
+            <td>{{order.user.username}}</td>
             <td>
             <a class="btn btn-primary btn-xs" href="/catalog/sharerShareableRequests/{{order.id}}/join/">Join</a>
             </td>

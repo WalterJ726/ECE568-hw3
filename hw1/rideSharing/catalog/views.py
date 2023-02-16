@@ -8,6 +8,7 @@ from django.urls import reverse
 from . import models
 from catalog.forms import LoginForm, RegisterModelForm, ownerUpdateModelForm, OrderModelForm, SharerSearchOrderForm, DriverUpdateForm
 from datetime import datetime
+from django.core.mail import send_mail
 
 def index(request):
     return render(
@@ -110,15 +111,15 @@ def ownerNewRequest(request):
 def ownerCurrentRequest(request):
     ## TODO: ordered list bullet
     owner_id = request.session['info']['id']
-    print(owner_id)
-    currentRequest = models.Order.objects.filter(user_id=owner_id)
+    currentRequest = models.Order.objects.filter(user_id=owner_id, is_completed=False)
     context = {'currentRequest': currentRequest} 
     return render(request, 'ownerCurrentRequest.html', context)
 
 def requestDelete(request, request_id):
     ## todo check the user id is equal to the deleter
+    owner_id = request.session['info']['id']
     models.Order.objects.filter(id=request_id).delete()
-    currentRequest = models.Order.objects.all()
+    currentRequest = models.Order.objects.filter(user_id=owner_id, is_completed=False)
     context = {'currentRequest': currentRequest} 
     return render(request, 'ownerCurrentRequest.html', context)
 
@@ -162,13 +163,14 @@ def sharerSearch(request):
         earliestTime = request.POST['earliestTime']
         latestTime = request.POST['latestTime']
         number_passengers = request.POST['number_passengers']
-        currentShareableRequests = models.Order.objects.filter(arrival_time__gte=earliestTime, arrival_time__lte=latestTime, destination=destination, total_passanger=number_passengers, shareable=True)
+        currentShareableRequests = models.Order.objects.filter(arrival_time__gte=earliestTime, arrival_time__lte=latestTime, destination=destination, total_passanger=number_passengers, shareable=True, is_completed=False, is_confirmed=False)
         context = {'currentShareableRequests': currentShareableRequests} 
         return render(request, 'sharerShareableRequests.html', context)
     return render(request, 'sharerSearch.html', {'form': form})
     
 
 def sharerShareableRequests(request):
+    ## seems like useless function
     ## TODO: ordered list bullet
     ## show the shared people's usernam could not show it through .user
     currentShareableRequests = models.Order.objects.filter(shareable=True)
@@ -185,8 +187,9 @@ def sharerShareableRequestsJoin(request, request_id):
     return render(request, 'sharerIndex.html')
 
 def sharerCurrentRequests(request):
+    shared_people_id = request.session['info']['id']
     shared_people = request.session['info']['name']
-    currentRequest = models.Order.objects.filter(shared_people=shared_people)
+    currentRequest = models.Order.objects.filter(shared_people=shared_people, shared_people_id=shared_people_id, is_completed=False, is_confirmed=False)
     context = {'currentRequest': currentRequest} 
     return render(request, 'sharerCurrentRequests.html', context)
 
@@ -194,7 +197,7 @@ def sharerCurrentRequests(request):
 def sharerShareableRequestsDelete(request, request_id):
     currentRequest = models.Order.objects.filter(id=request_id)
     current_number = currentRequest.first().total_passanger ## currentRequest.first() is an object
-    currentRequest.update(total_passanger=current_number-1, shared_people=None)
+    currentRequest.update(total_passanger=current_number-1, shared_people=None, shared_people_id=None)
     return render(request, 'sharerIndex.html')
 
 def sharerPassOrder(request):
@@ -243,8 +246,25 @@ def driverSearchConfirmed(request, request_id):
     print(driver_object)
     vehicle_type = driver_object.vehicle_type
     plate_number = driver_object.plate_number
-    confirmed_order_obejct = models.Order.objects.filter(id=request_id)
-    confirmed_order_obejct.update(is_confirmed=True, plate_number=plate_number, vehicle_type=vehicle_type)
+    confirmed_order_obejct = models.Order.objects.filter(id=request_id).first()
+    confirmed_order_obejct_instance = models.Order.objects.filter(id=request_id)
+    email_reception = []
+    user_object = models.User.objects.filter(id=confirmed_order_obejct.user_id).first()
+    user_object_email = user_object.email
+    email_reception.append(user_object_email)
+    if confirmed_order_obejct.shared_people_id != None:
+        sharer_object = models.User.objects.filter(id=confirmed_order_obejct.shared_people_id).first()
+        sharer_object_email = sharer_object.email
+        email_reception.append(sharer_object_email)
+
+    confirmed_order_obejct_instance.update(is_confirmed=True, plate_number=plate_number, vehicle_type=vehicle_type)
+    send_mail(
+        subject='rideSharing App Confirmed Email',
+        message='Your order has been order',
+        from_email='walterjiang726@gmail.com',
+        recipient_list=email_reception,
+        fail_silently=False
+    )
     return render(request, 'driverIndex.html')
 
 def driverOrders(request):

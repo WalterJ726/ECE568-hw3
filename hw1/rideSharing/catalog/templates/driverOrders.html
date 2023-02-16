@@ -10,6 +10,7 @@
           <th scope="col">Destination</th>
           <th scope="col">Arrival_time</th>
           <th scope="col">total_passanger</th>
+          <th scope="col">Order Owner</th>
           <th scope="col">Shared People</th>
           <th scope="col">Action</th>
         </tr>
@@ -21,6 +22,7 @@
             <td>{{order.destination}}</td>
             <td>{{order.arrival_time}}</td>
             <td>{{order.total_passanger}}</td>
+            <td>{{order.user_username}}</td>
             <td>{{order.shared_people}}</td>
             <td>
             <a class="btn btn-primary btn-xs" href="/catalog/driverOrders/{{order.id}}/completed/">Complete</a>
